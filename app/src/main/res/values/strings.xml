@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Movies</string>
     <string name="action_settings">Settings</string>
+    <string name="desc_movie_poster">Movie Poster</string>
+    <string name="sync_account_type">com.axay.movies</string>
+    <string name="content_authority">com.axay.android.movies.app</string>
 </resources>
