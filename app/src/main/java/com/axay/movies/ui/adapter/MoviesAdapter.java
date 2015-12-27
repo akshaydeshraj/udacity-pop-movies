@@ -9,6 +9,7 @@ import android.widget.ImageView;
 
 import com.axay.movies.R;
 import com.axay.movies.data.Movie;
+import com.axay.movies.ui.fragment.MoviesFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -21,20 +22,29 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
 
     private ArrayList<Movie> moviesArrayList;
     private Context mContext;
+    private MoviesFragment moviesFragment;
 
-    public MoviesAdapter(Context context, ArrayList<Movie> movieArrayList) {
+    public MoviesAdapter(Context context, ArrayList<Movie> movieArrayList, MoviesFragment moviesFragment) {
         this.moviesArrayList = movieArrayList;
         this.mContext = context;
+        this.moviesFragment = moviesFragment;
     }
 
     final String BASE_IMAGE_URL = "http://image.tmdb.org/t/p/w185";
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
 
         String posterPath = moviesArrayList.get(position).getPosterPath();
         Picasso.with(mContext).load(BASE_IMAGE_URL + posterPath)
                 .into(holder.ivMoviePoster);
+
+        holder.ivMoviePoster.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                moviesFragment.itemClicked(position);
+            }
+        });
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.axay.movies.ui.fragment;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -59,9 +60,11 @@ public class MoviesFragment extends Fragment {
 
     FetchMoviesTask fetchMoviesTask;
 
-    public interface Callback {
-        void onItemSelected(int position);
+    public interface OnMovieSelectedListener {
+        void onItemSelected(Movie movie);
     }
+
+    OnMovieSelectedListener mCallback;
 
     public MoviesFragment() {
     }
@@ -105,7 +108,7 @@ public class MoviesFragment extends Fragment {
 
         Log.d(TAG, "onCreateView");
 
-        mMoviesAdapter = new MoviesAdapter(getActivity(), moviesData);
+        mMoviesAdapter = new MoviesAdapter(getActivity(), moviesData, this);
 
         View rootView = inflater.inflate(R.layout.fragment_movie, container, false);
 
@@ -139,6 +142,19 @@ public class MoviesFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        try {
+            mCallback = (OnMovieSelectedListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnHeadlineSelectedListener");
+
+        }
+    }
+
     private void applyFilter(String filter) {
         moviesData.clear();
         mMoviesAdapter.notifyDataSetChanged();
@@ -155,6 +171,9 @@ public class MoviesFragment extends Fragment {
         fetchMoviesTask.execute(filter, pageNumber);
     }
 
+    public void itemClicked(int position) {
+        mCallback.onItemSelected(moviesData.get(position));
+    }
 
     private ArrayList<Movie> getMovieDataFromJson(String movieJsonStr)
             throws JSONException {
@@ -165,7 +184,9 @@ public class MoviesFragment extends Fragment {
         final String KEY_POSTER_PATH = "poster_path";
         final String KEY_OVERVIEW = "overview";
         final String KEY_BACKDROP_PATH = "backdrop_path";
-        final String KEY_VOTE_AVERAgE = "vote_average";
+        final String KEY_VOTE_AVERAGE = "vote_average";
+        final String KEY_RELEASE_DATE = "release_date";
+        final String KEY_ORIGINAL_TITLE = "original_title";
 
         JSONObject response = new JSONObject(movieJsonStr);
         JSONArray moviesArray = response.getJSONArray(KEY_RESULTS);
@@ -179,9 +200,13 @@ public class MoviesFragment extends Fragment {
             String posterPath = jsonObject.getString(KEY_POSTER_PATH);
             String overview = jsonObject.getString(KEY_OVERVIEW);
             String backdropPath = jsonObject.getString(KEY_BACKDROP_PATH);
-            String voteAverage = jsonObject.getString(KEY_VOTE_AVERAgE);
+            String voteAverage = jsonObject.getString(KEY_VOTE_AVERAGE);
+            String releaseDate = jsonObject.getString(KEY_RELEASE_DATE);
+            String originalTitle = jsonObject.getString(KEY_ORIGINAL_TITLE);
 
-            Movie movie = new Movie(title, posterPath, overview, backdropPath, voteAverage);
+            Movie movie = new Movie(title, posterPath, overview,
+                    backdropPath, voteAverage, releaseDate, originalTitle);
+
             movieArrayList.add(movie);
         }
 
