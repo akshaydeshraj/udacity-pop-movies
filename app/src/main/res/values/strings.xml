@@ -4,4 +4,6 @@
     <string name="desc_movie_poster">Movie Poster</string>
     <string name="sync_account_type">com.axay.movies</string>
     <string name="content_authority">com.axay.android.movies.app</string>
+    <string name="action_sort_popularity">Sort By Popularity</string>
+    <string name="action_sort_rating">Sort By Rating</string>
 </resources>

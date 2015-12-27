@@ -51,12 +51,15 @@ public class MoviesFragment extends Fragment {
     int pastVisiblesItems, visibleItemCount, totalItemCount;
 
     private int pageNumber = 1;
+
     private String filter = null;
 
+    private final String FILTER_POPULARITY = "popularity.desc";
+    private final String FILTER_RATING = "vote_average.desc";
+
+    FetchMoviesTask fetchMoviesTask;
+
     public interface Callback {
-        /**
-         * DetailFragmentCallback for when an item has been selected.
-         */
         void onItemSelected(int position);
     }
 
@@ -83,9 +86,13 @@ public class MoviesFragment extends Fragment {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case R.id.action_sort_popularity:
+                applyFilter(FILTER_POPULARITY);
+                break;
+            case R.id.action_sort_rating:
+                applyFilter(FILTER_RATING);
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -132,8 +139,20 @@ public class MoviesFragment extends Fragment {
         return rootView;
     }
 
+    private void applyFilter(String filter) {
+        moviesData.clear();
+        mMoviesAdapter.notifyDataSetChanged();
+
+        if (!fetchMoviesTask.isCancelled()) {
+            fetchMoviesTask.cancel(true);
+        }
+        pageNumber = 1;
+        sendRequest(filter, String.valueOf(pageNumber));
+    }
+
     private void sendRequest(String filter, String pageNumber) {
-        new FetchMoviesTask().execute(filter, pageNumber);
+        fetchMoviesTask = new FetchMoviesTask();
+        fetchMoviesTask.execute(filter, pageNumber);
     }
 
 
