@@ -17,8 +17,8 @@ import android.view.ViewGroup;
 
 import com.axay.movies.BuildConfig;
 import com.axay.movies.R;
+import com.axay.movies.data.Movie;
 import com.axay.movies.ui.adapter.MoviesAdapter;
-import com.axay.movies.ui.data.Movie;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,11 +46,13 @@ public class MoviesFragment extends Fragment {
 
     private ArrayList<Movie> moviesData = new ArrayList<>();
 
-    /**
-     * A callback interface that all activities containing this fragment must
-     * implement. This mechanism allows activities to be notified of item
-     * selections.
-     */
+    //For pagination
+    private boolean loading = true;
+    int pastVisiblesItems, visibleItemCount, totalItemCount;
+
+    private int pageNumber = 1;
+    private String filter = null;
+
     public interface Callback {
         /**
          * DetailFragmentCallback for when an item has been selected.
@@ -96,18 +98,44 @@ public class MoviesFragment extends Fragment {
 
         Log.d(TAG, "onCreateView");
 
-        mMoviesAdapter = new MoviesAdapter(moviesData);
+        mMoviesAdapter = new MoviesAdapter(getActivity(), moviesData);
 
         View rootView = inflater.inflate(R.layout.fragment_movie, container, false);
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.rv_movies_grid);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        final GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2);
+        mRecyclerView.setLayoutManager(gridLayoutManager);
         mRecyclerView.setAdapter(mMoviesAdapter);
 
-        new FetchMoviesTask().execute();
+        sendRequest(filter, String.valueOf(pageNumber));
+
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+
+                if (dy > 0) {
+                    visibleItemCount = gridLayoutManager.getChildCount();
+                    totalItemCount = gridLayoutManager.getItemCount();
+                    pastVisiblesItems = gridLayoutManager.findFirstVisibleItemPosition();
+
+                    if (loading) {
+                        if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                            loading = false;
+                            ++pageNumber;
+                            sendRequest(filter, String.valueOf(pageNumber));
+                        }
+                    }
+                }
+            }
+        });
 
         return rootView;
     }
+
+    private void sendRequest(String filter, String pageNumber) {
+        new FetchMoviesTask().execute(filter, pageNumber);
+    }
+
 
     private ArrayList<Movie> getMovieDataFromJson(String movieJsonStr)
             throws JSONException {
@@ -147,7 +175,7 @@ public class MoviesFragment extends Fragment {
         protected ArrayList<Movie> doInBackground(String... params) {
 
             boolean filter = false;
-            if (!(params.length == 0)) {
+            if (!(params[0] == null)) {
                 filter = true;
             }
 
@@ -164,9 +192,11 @@ public class MoviesFragment extends Fragment {
                         "http://api.themoviedb.org/3/discover/movie?";
                 final String PARAM_API_KEY = "api_key";
                 final String PARAM_SORT_BY = "sort_by";
+                final String PARAM_PAGE = "page";
 
                 Uri.Builder uriBuilder = Uri.parse(MOVIES_BASE_URL).buildUpon()
-                        .appendQueryParameter(PARAM_API_KEY, BuildConfig.TMDB_API_KEY);
+                        .appendQueryParameter(PARAM_API_KEY, BuildConfig.TMDB_API_KEY)
+                        .appendQueryParameter(PARAM_PAGE, String.valueOf(pageNumber));
 
                 if (filter) {
                     uriBuilder.appendQueryParameter(PARAM_SORT_BY, params[0]);
@@ -241,6 +271,7 @@ public class MoviesFragment extends Fragment {
             super.onPostExecute(movies);
             moviesData.addAll(movies);
             mMoviesAdapter.notifyItemRangeInserted(moviesData.size(), movies.size());
+            loading = true;
         }
     }
 }

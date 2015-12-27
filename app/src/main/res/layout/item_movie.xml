@@ -10,16 +10,4 @@
         android:contentDescription="@string/desc_movie_poster"
         android:src="@mipmap/ic_launcher" />
 
-    <TextView
-        android:id="@+id/tv_movie_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp" />
-
-    <TextView
-        android:id="@+id/tv_movie_genre"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp" />
-
 </LinearLayout>

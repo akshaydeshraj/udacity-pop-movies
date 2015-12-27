@@ -1,4 +1,4 @@
-package com.axay.movies.ui.data;
+package com.axay.movies.data;
 
 /**
  * @author akshay

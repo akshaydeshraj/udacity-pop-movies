@@ -1,14 +1,15 @@
 package com.axay.movies.ui.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.axay.movies.R;
-import com.axay.movies.ui.data.Movie;
+import com.axay.movies.data.Movie;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -19,15 +20,21 @@ import java.util.ArrayList;
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder> {
 
     private ArrayList<Movie> moviesArrayList;
+    private Context mContext;
 
-    public MoviesAdapter(ArrayList<Movie> movieArrayList) {
+    public MoviesAdapter(Context context, ArrayList<Movie> movieArrayList) {
         this.moviesArrayList = movieArrayList;
+        this.mContext = context;
     }
+
+    final String BASE_IMAGE_URL = "http://image.tmdb.org/t/p/w185";
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.tvMovieName.setText(moviesArrayList.get(position).getTitle());
-        holder.tvMovieGenre.setText(String.valueOf(position));
+
+        String posterPath = moviesArrayList.get(position).getPosterPath();
+        Picasso.with(mContext).load(BASE_IMAGE_URL + posterPath)
+                .into(holder.ivMoviePoster);
     }
 
     @Override
@@ -47,14 +54,10 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
 
         ImageView ivMoviePoster;
 
-        TextView tvMovieName, tvMovieGenre;
-
         public ViewHolder(View itemView) {
             super(itemView);
 
             ivMoviePoster = (ImageView) itemView.findViewById(R.id.iv_movie_pic);
-            tvMovieName = (TextView) itemView.findViewById(R.id.tv_movie_name);
-            tvMovieGenre = (TextView) itemView.findViewById(R.id.tv_movie_genre);
         }
     }
 }
