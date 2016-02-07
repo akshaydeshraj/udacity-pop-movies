@@ -1,5 +1,8 @@
 package com.axay.movies.data;
 
+import com.axay.movies.AppModule;
+import com.axay.movies.data.api.ApiModule;
+
 import javax.inject.Singleton;
 
 import dagger.Component;
@@ -11,7 +14,9 @@ import dagger.Component;
 
 @Singleton
 @Component(
-
+        modules = {DataModule.class,
+                ApiModule.class},
+        dependencies = AppModule.class
 )
 public interface DataComponent {
 }

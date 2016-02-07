@@ -1,7 +1,5 @@
 package com.axay.movies;
 
-import android.app.Application;
-
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -23,7 +21,7 @@ public class AppModule {
 
     @Provides
     @Singleton
-    public Application provideApplication() {
+    public App provideApplication() {
         return app;
     }
 }

@@ -1,7 +1,5 @@
 package com.axay.movies.data;
 
-import android.app.Application;
-
 import com.axay.movies.App;
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
@@ -29,7 +27,7 @@ public class DataModule {
 
     static final int DISK_CACHE_SIZE = (int) MEGABYTES.toBytes(50);
 
-    static OkHttpClient.Builder createOkHttpClient(Application app) {
+    static OkHttpClient.Builder createOkHttpClient(App app) {
         // Install an HTTP cache in the application cache directory.
         File cacheDir = new File(app.getCacheDir(), "http");
         Cache cache = new Cache(cacheDir, DISK_CACHE_SIZE);
@@ -49,7 +47,7 @@ public class DataModule {
 
     @Provides
     @Singleton
-    Picasso providePicasso(Application app, OkHttpClient client) {
+    Picasso providePicasso(App app, OkHttpClient client) {
         return new Picasso.Builder(app)
                 .downloader(new OkHttp3Downloader(client))
                 .listener((picasso, uri, e) -> Timber.e(e, "Failed to load image: %s", uri))

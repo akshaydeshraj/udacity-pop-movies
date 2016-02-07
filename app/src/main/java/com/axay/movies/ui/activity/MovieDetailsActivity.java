@@ -2,24 +2,27 @@ package com.axay.movies.ui.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.axay.movies.R;
+import com.axay.movies.commons.BaseActivity;
 import com.axay.movies.data.Movie;
 import com.squareup.picasso.Picasso;
+
+import javax.inject.Inject;
 
 /**
  * @author akshay
  * @since 27/12/15
  */
-public class MovieDetailsActivity extends AppCompatActivity {
-
-    private static final String TAG = MovieDetailsActivity.class.getSimpleName();
+public class MovieDetailsActivity extends BaseActivity {
 
     public static final String MOVIE = "key_movie";
+
+    @Inject
+    Picasso picasso;
 
     ImageView ivBackdrop, ivPoster;
 
@@ -46,12 +49,17 @@ public class MovieDetailsActivity extends AppCompatActivity {
         tvReleaseDate = (TextView) findViewById(R.id.tv_release_date);
         tvUserRating = (TextView) findViewById(R.id.tv_user_rating);
 
-        Picasso.with(this).load(BASE_BACKDROP_URL + movie.getBackdropPath()).fit().centerCrop().into(ivBackdrop);
-        Picasso.with(this).load(BASE_IMAGE_URL + movie.getPosterPath()).fit().centerCrop().into(ivPoster);
+        picasso.load(BASE_BACKDROP_URL + movie.getBackdropPath()).fit().centerCrop().into(ivBackdrop);
+        picasso.load(BASE_IMAGE_URL + movie.getPosterPath()).fit().centerCrop().into(ivPoster);
 
         tvOverView.setText(movie.getOverview());
         tvReleaseDate.setText(movie.getReleaseDate());
         tvUserRating.setText(new StringBuilder().append("Rating : ").append(movie.getVoteAverage()));
+    }
+
+    @Override
+    protected void setupComponent() {
+        initialiseComponent().inject(this);
     }
 
     @Override
