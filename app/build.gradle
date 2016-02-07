@@ -68,6 +68,11 @@ android {
     dataBinding {
         enabled = true
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
@@ -88,7 +93,7 @@ dependencies {
 
     //Network
     compile 'com.squareup.okhttp3:okhttp:3.1.0'
-    compile 'com.squareup.okhttp:logging-interceptor:2.7.2'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.1.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.0.2'
     compile 'com.squareup.retrofit2:retrofit:2.0.0-beta4'
