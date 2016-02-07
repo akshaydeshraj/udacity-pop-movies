@@ -8,6 +8,6 @@ Obtain a key via the following [instructions](https://www.themoviedb.org/documen
 
 ## Images
 
-![tablet](art/tablet.png)
+![tablet](art/tab.png)
 
 ![phone](art/phone.png)
