@@ -17,10 +17,10 @@ public class MainActivity extends AppCompatActivity implements MoviesFragment.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (findViewById(R.id.fragment_container) != null) {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
+        if (findViewById(R.id.fragment_container) != null) {
 
             if (savedInstanceState != null) {
                 return;

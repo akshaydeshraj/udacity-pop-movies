@@ -88,6 +88,7 @@ public class MovieDetailsFragment extends BaseFragment {
     }
 
     public void updateMovie(Movie movie) {
+        list.clear();
         this.movie = movie;
         list.add(movie);
         loadAdditionalData();
@@ -97,7 +98,7 @@ public class MovieDetailsFragment extends BaseFragment {
 
         Observable.zip(tmdbApi.getMovieReviews(movie.getId()), tmdbApi.getMovieTrailers(movie.getId()),
                 (reviewsResponse, videoResponse) -> {
-                    List<Object> reviewsAndTrailers = new ArrayList<Object>();
+                    List<Object> reviewsAndTrailers = new ArrayList<>();
                     reviewsAndTrailers.addAll(videoResponse.getResults());
                     reviewsAndTrailers.addAll(reviewsResponse.getResults());
                     return reviewsAndTrailers;
