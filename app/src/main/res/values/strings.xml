@@ -7,4 +7,6 @@
     <string name="action_sort_popularity">Sort By Popularity</string>
     <string name="action_sort_rating">Sort By Rating</string>
     <string name="action_favourites">Favourites</string>
+    <string name="review">Review</string>
+    <string name="trailer">Trailer</string>
 </resources>

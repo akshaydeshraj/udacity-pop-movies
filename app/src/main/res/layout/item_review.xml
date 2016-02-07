@@ -1,25 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/ll_review"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="@string/review"
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/tv_review_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:padding="5dp"/>
+        android:padding="5dp"
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/tv_review_author"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
         android:padding="5dp"
-        android:textStyle="italic"/>
+        android:textSize="16sp"
+        android:textStyle="italic" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/colorPrimary" />
 
 </LinearLayout>

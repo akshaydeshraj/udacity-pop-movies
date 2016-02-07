@@ -83,7 +83,11 @@ public class MovieDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 movieViewHolder.tvReleaseDate.setText(movie.getReleaseDate());
                 movieViewHolder.tvUserRating.setText(new
                         StringBuilder().append("Rating : ").append(movie.getVoteAverage()));
-                movieViewHolder.btnFavourite.setOnClickListener(v -> insertData(movie));
+                movieViewHolder.btnFavourite.setOnFavoriteChangeListener((buttonView, favorite) -> {
+                    if(favorite){
+                        insertData(movie);
+                    }
+                });
                 break;
 
             case TRAILER:

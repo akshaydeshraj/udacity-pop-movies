@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -19,7 +20,7 @@
         android:padding="3dp" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/iv_backdrop"
         android:layout_toRightOf="@id/iv_poster"
@@ -33,11 +34,13 @@
             android:id="@+id/tv_user_rating"
             style="@style/MovieDetailsTextAppearance" />
 
-        <Button
+        <com.github.ivbaranov.mfb.MaterialFavoriteButton
             android:id="@+id/btn_favourite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Favourite" />
+            app:mfb_animate_favorite="true"
+            app:mfb_animate_unfavorite="true"
+            app:mfb_color="black" />
 
     </LinearLayout>
 
@@ -45,5 +48,15 @@
         android:id="@+id/tv_overview"
         style="@style/MovieDetailsTextAppearance"
         android:layout_below="@id/iv_poster" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/colorPrimary"
+        android:layout_below="@id/tv_overview"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="5dp" />
 
 </RelativeLayout>

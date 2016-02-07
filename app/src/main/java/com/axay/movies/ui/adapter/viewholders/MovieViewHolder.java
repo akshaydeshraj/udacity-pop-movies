@@ -2,11 +2,11 @@ package com.axay.movies.ui.adapter.viewholders;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.axay.movies.R;
+import com.github.ivbaranov.mfb.MaterialFavoriteButton;
 
 /**
  * @author akshay
@@ -16,7 +16,7 @@ public class MovieViewHolder extends RecyclerView.ViewHolder {
 
     public ImageView ivBackdrop, ivPoster;
     public TextView tvOverView, tvReleaseDate, tvUserRating;
-    public Button btnFavourite;
+    public MaterialFavoriteButton btnFavourite;
     
     public MovieViewHolder(View itemView) {
         super(itemView);
@@ -26,6 +26,6 @@ public class MovieViewHolder extends RecyclerView.ViewHolder {
         tvOverView = (TextView) itemView.findViewById(R.id.tv_overview);
         tvReleaseDate = (TextView) itemView.findViewById(R.id.tv_release_date);
         tvUserRating = (TextView) itemView.findViewById(R.id.tv_user_rating);
-        btnFavourite = (Button) itemView.findViewById(R.id.btn_favourite);
+        btnFavourite = (MaterialFavoriteButton) itemView.findViewById(R.id.btn_favourite);
     }
 }
