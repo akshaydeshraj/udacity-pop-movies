@@ -105,12 +105,6 @@ public class MoviesFragment extends BaseFragment implements LoaderManager.Loader
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        Cursor c =
-                getActivity().getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI,
-                        new String[]{MovieContract.MovieEntry._ID},
-                        null,
-                        null,
-                        null);
         getLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
         super.onActivityCreated(savedInstanceState);
     }

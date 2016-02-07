@@ -1,13 +1,16 @@
-package com.axay.movies.ui.activity;
+package com.axay.movies.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.axay.movies.R;
-import com.axay.movies.commons.BaseActivity;
+import com.axay.movies.commons.BaseFragment;
 import com.axay.movies.data.api.TmdbApi;
 import com.axay.movies.data.api.model.Movie;
 import com.axay.movies.ui.adapter.MovieDetailsAdapter;
@@ -28,7 +31,7 @@ import timber.log.Timber;
  * @author akshay
  * @since 27/12/15
  */
-public class MovieDetailsActivity extends BaseActivity {
+public class MovieDetailsFragment extends BaseFragment {
 
     public static final String MOVIE = "key_movie";
 
@@ -45,23 +48,29 @@ public class MovieDetailsActivity extends BaseActivity {
     List<Object> list = new ArrayList<>();
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_movie_details);
 
-        movie = getIntent().getParcelableExtra(MOVIE);
+        Bundle args = getArguments();
+        if (args != null) {
+            movie = args.getParcelable(MOVIE);
+        }
+    }
 
-        list.add(movie);
 
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(movie.getOriginalTitle());
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.activity_movie_details, container, false);
+
+        rvMovieDetails = (RecyclerView) rootView.findViewById(R.id.rv_movie_details);
+        rvMovieDetails.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        if (movie != null) {
+            updateMovie(movie);
         }
 
-        rvMovieDetails = (RecyclerView) findViewById(R.id.rv_movie_details);
-        rvMovieDetails.setLayoutManager(new LinearLayoutManager(this));
-
-        loadAdditionalData();
+        return rootView;
     }
 
     @Override
@@ -73,10 +82,15 @@ public class MovieDetailsActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void updateMovie(Movie movie) {
+        this.movie = movie;
+        list.add(movie);
+        loadAdditionalData();
     }
 
     private void loadAdditionalData() {
@@ -105,7 +119,7 @@ public class MovieDetailsActivity extends BaseActivity {
                     public void onNext(List<Object> objects) {
                         list.addAll(objects);
                         MovieDetailsAdapter movieDetailsAdapter = new
-                                MovieDetailsAdapter(list, MovieDetailsActivity.this, picasso);
+                                MovieDetailsAdapter(list, getActivity(), picasso);
                         rvMovieDetails.setAdapter(movieDetailsAdapter);
                     }
                 });
