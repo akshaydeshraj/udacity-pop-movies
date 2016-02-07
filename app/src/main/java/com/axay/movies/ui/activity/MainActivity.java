@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.axay.movies.R;
-import com.axay.movies.data.Movie;
+import com.axay.movies.data.api.model.Movie;
 import com.axay.movies.ui.fragment.MoviesFragment;
 
 public class MainActivity extends AppCompatActivity implements MoviesFragment.OnMovieSelectedListener {

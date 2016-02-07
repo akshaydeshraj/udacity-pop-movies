@@ -18,7 +18,7 @@ import android.view.ViewGroup;
 
 import com.axay.movies.BuildConfig;
 import com.axay.movies.R;
-import com.axay.movies.data.Movie;
+import com.axay.movies.data.api.model.Movie;
 import com.axay.movies.ui.adapter.MoviesAdapter;
 
 import org.json.JSONArray;

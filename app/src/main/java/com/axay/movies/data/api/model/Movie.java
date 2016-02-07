@@ -1,4 +1,4 @@
-package com.axay.movies.data;
+package com.axay.movies.data.api.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

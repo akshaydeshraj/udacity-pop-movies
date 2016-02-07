@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.axay.movies.R;
-import com.axay.movies.data.Movie;
+import com.axay.movies.data.api.model.Movie;
 import com.axay.movies.ui.fragment.MoviesFragment;
 import com.squareup.picasso.Picasso;
 

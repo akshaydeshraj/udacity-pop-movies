@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.axay.movies.R;
 import com.axay.movies.commons.BaseActivity;
-import com.axay.movies.data.Movie;
+import com.axay.movies.data.api.model.Movie;
 import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
