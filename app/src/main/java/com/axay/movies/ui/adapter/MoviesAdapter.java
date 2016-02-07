@@ -32,6 +32,11 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
 
     final String BASE_IMAGE_URL = "http://image.tmdb.org/t/p/w185";
 
+    public void clearAdapter(){
+        moviesArrayList.clear();
+        notifyDataSetChanged();
+    }
+
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
 
@@ -39,12 +44,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
         Picasso.with(mContext).load(BASE_IMAGE_URL + posterPath)
                 .into(holder.ivMoviePoster);
 
-        holder.ivMoviePoster.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                moviesFragment.itemClicked(position);
-            }
-        });
+        holder.ivMoviePoster.setOnClickListener(v -> moviesFragment.itemClicked(position));
     }
 
     @Override

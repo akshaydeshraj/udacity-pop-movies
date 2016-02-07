@@ -1,8 +1,12 @@
 package com.axay.movies.ui.fragment;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.axay.movies.BuildConfig;
 import com.axay.movies.R;
@@ -18,10 +23,12 @@ import com.axay.movies.commons.BaseFragment;
 import com.axay.movies.data.api.TmdbApi;
 import com.axay.movies.data.api.model.DiscoverMovieResponse;
 import com.axay.movies.data.api.model.Movie;
+import com.axay.movies.data.provider.MovieContract;
 import com.axay.movies.ui.adapter.MoviesAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -31,17 +38,30 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
+import static com.axay.movies.data.provider.MovieContract.MovieEntry.COLUMN_ADULT;
+import static com.axay.movies.data.provider.MovieContract.MovieEntry.COLUMN_BACKDROP;
+import static com.axay.movies.data.provider.MovieContract.MovieEntry.COLUMN_MOVIE_ID;
+import static com.axay.movies.data.provider.MovieContract.MovieEntry.COLUMN_OVERVIEW;
+import static com.axay.movies.data.provider.MovieContract.MovieEntry.COLUMN_POPULARITY;
+import static com.axay.movies.data.provider.MovieContract.MovieEntry.COLUMN_POSTER;
+import static com.axay.movies.data.provider.MovieContract.MovieEntry.COLUMN_RELEASE_DATE;
+import static com.axay.movies.data.provider.MovieContract.MovieEntry.COLUMN_TITLE;
+import static com.axay.movies.data.provider.MovieContract.MovieEntry.COLUMN_VIDEO;
+import static com.axay.movies.data.provider.MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE;
+import static com.axay.movies.data.provider.MovieContract.MovieEntry.COLUMN_VOTE_COUNT;
+
 /**
  * @author akshay
  * @since 27/12/15
  */
-public class MoviesFragment extends BaseFragment {
+public class MoviesFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private MoviesAdapter mMoviesAdapter;
 
     private RecyclerView mRecyclerView;
 
     private ArrayList<Movie> moviesData = new ArrayList<>();
+    private List<Movie> favouritesMoviesList = new ArrayList<>();
 
     //For pagination
     private boolean loading = true;
@@ -53,6 +73,8 @@ public class MoviesFragment extends BaseFragment {
     private final String FILTER_RATING = "vote_average.desc";
 
     private String filter = FILTER_POPULARITY; //default value of filter
+
+    private static final int CURSOR_LOADER_ID = 0;
 
     @Inject
     TmdbApi tmdbApi;
@@ -79,6 +101,18 @@ public class MoviesFragment extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        Cursor c =
+                getActivity().getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI,
+                        new String[]{MovieContract.MovieEntry._ID},
+                        null,
+                        null,
+                        null);
+        getLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
+        super.onActivityCreated(savedInstanceState);
     }
 
     @Nullable
@@ -147,6 +181,9 @@ public class MoviesFragment extends BaseFragment {
             case R.id.action_sort_rating:
                 applyFilter(FILTER_RATING);
                 break;
+            case R.id.action_favourites:
+                showFavourites();
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -165,13 +202,49 @@ public class MoviesFragment extends BaseFragment {
         }
     }
 
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new CursorLoader(getActivity(),
+                MovieContract.MovieEntry.CONTENT_URI,
+                null,
+                null,
+                null,
+                null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
+        if (data.getCount() == 0) {
+            Toast.makeText(getActivity(), "No Favourites", Toast.LENGTH_SHORT).show();
+        } else {
+            for (data.moveToFirst(); !data.isAfterLast(); data.moveToNext()) {
+                Movie movie = new Movie();
+                movie.setId(data.getString(data.getColumnIndex(COLUMN_MOVIE_ID)));
+                movie.setTitle(data.getString(data.getColumnIndex(COLUMN_TITLE)));
+                movie.setPosterPath(data.getString(data.getColumnIndex(COLUMN_POSTER)));
+                movie.setOverview(data.getString(data.getColumnIndex(COLUMN_OVERVIEW)));
+                movie.setBackdropPath(data.getString(data.getColumnIndex(COLUMN_BACKDROP)));
+                movie.setVoteAverage(data.getString(data.getColumnIndex(COLUMN_VOTE_AVERAGE)));
+                movie.setReleaseDate(data.getString(data.getColumnIndex(COLUMN_RELEASE_DATE)));
+                movie.setPopularity(data.getString(data.getColumnIndex(COLUMN_POPULARITY)));
+                movie.setVoteCount(data.getString(data.getColumnIndex(COLUMN_VOTE_COUNT)));
+                movie.setVideo(Boolean.parseBoolean(data.getString(data.getColumnIndex(COLUMN_VIDEO))));
+                movie.setAdult(Boolean.parseBoolean(data.getString(data.getColumnIndex(COLUMN_ADULT))));
+
+                favouritesMoviesList.add(movie);
+            }
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        //Do Nothing
+    }
+
     private void applyFilter(String filter) {
         moviesData.clear();
         mMoviesAdapter.notifyDataSetChanged();
-
-        /*if (!fetchMoviesTask.isCancelled()) {
-            fetchMoviesTask.cancel(true);
-        }*/
 
         if (!subscription.isUnsubscribed()) {
             subscription.unsubscribe();
@@ -182,9 +255,16 @@ public class MoviesFragment extends BaseFragment {
         sendRequest(filter, String.valueOf(pageNumber));
     }
 
-    private void sendRequest(String filter, String pageNumber) {
+    private void showFavourites() {
+        mMoviesAdapter.clearAdapter();
 
-        Timber.i("Sending Request");
+        moviesData.clear();
+        moviesData.addAll(favouritesMoviesList);
+        mMoviesAdapter.notifyItemRangeInserted(moviesData.size(),
+                favouritesMoviesList.size());
+    }
+
+    private void sendRequest(String filter, String pageNumber) {
 
         queryMap.put(PARAM_PAGE, pageNumber);
         queryMap.put(PARAM_SORT_BY, filter);

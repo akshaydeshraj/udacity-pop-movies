@@ -40,6 +40,9 @@ public class Movie implements Parcelable {
 
     private boolean adult;
 
+    public Movie() {
+    }
+
     public Movie(Parcel source) {
         this.title = source.readString();
         this.posterPath = source.readString();
@@ -136,5 +139,53 @@ public class Movie implements Parcelable {
 
     public boolean isAdult() {
         return adult;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setPosterPath(String posterPath) {
+        this.posterPath = posterPath;
+    }
+
+    public void setOverview(String overview) {
+        this.overview = overview;
+    }
+
+    public void setBackdropPath(String backdropPath) {
+        this.backdropPath = backdropPath;
+    }
+
+    public void setVoteAverage(String voteAverage) {
+        this.voteAverage = voteAverage;
+    }
+
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    public void setOriginalTitle(String originalTitle) {
+        this.originalTitle = originalTitle;
+    }
+
+    public void setPopularity(String popularity) {
+        this.popularity = popularity;
+    }
+
+    public void setVoteCount(String voteCount) {
+        this.voteCount = voteCount;
+    }
+
+    public void setVideo(boolean video) {
+        this.video = video;
+    }
+
+    public void setAdult(boolean adult) {
+        this.adult = adult;
     }
 }

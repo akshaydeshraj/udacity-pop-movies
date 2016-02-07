@@ -6,4 +6,5 @@
     <string name="content_authority">com.axay.android.movies.app</string>
     <string name="action_sort_popularity">Sort By Popularity</string>
     <string name="action_sort_rating">Sort By Rating</string>
+    <string name="action_favourites">Favourites</string>
 </resources>
