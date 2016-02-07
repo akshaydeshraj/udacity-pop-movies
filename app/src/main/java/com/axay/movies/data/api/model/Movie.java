@@ -40,17 +40,6 @@ public class Movie implements Parcelable {
 
     private boolean adult;
 
-    public Movie(String title, String posterPath, String overview,
-                 String backdropPath, String voteAverage, String releaseDate, String originalTitle) {
-        this.title = title;
-        this.posterPath = posterPath;
-        this.overview = overview;
-        this.backdropPath = backdropPath;
-        this.voteAverage = voteAverage;
-        this.releaseDate = releaseDate;
-        this.originalTitle = originalTitle;
-    }
-
     public Movie(Parcel source) {
         this.title = source.readString();
         this.posterPath = source.readString();
@@ -59,6 +48,11 @@ public class Movie implements Parcelable {
         this.voteAverage = source.readString();
         this.releaseDate = source.readString();
         this.originalTitle = source.readString();
+        this.id = source.readString();
+        this.popularity = source.readString();
+        this.voteCount = source.readString();
+        this.video = Boolean.parseBoolean(source.readString());
+        this.adult = Boolean.parseBoolean(source.readString());
     }
 
     @Override
@@ -76,6 +70,11 @@ public class Movie implements Parcelable {
         dest.writeString(voteAverage);
         dest.writeString(releaseDate);
         dest.writeString(originalTitle);
+        dest.writeString(id);
+        dest.writeString(popularity);
+        dest.writeString(voteCount);
+        dest.writeString(String.valueOf(video));
+        dest.writeString(String.valueOf(adult));
     }
 
     static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
@@ -117,5 +116,25 @@ public class Movie implements Parcelable {
 
     public String getOriginalTitle() {
         return originalTitle;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getPopularity() {
+        return popularity;
+    }
+
+    public String getVoteCount() {
+        return voteCount;
+    }
+
+    public boolean isVideo() {
+        return video;
+    }
+
+    public boolean isAdult() {
+        return adult;
     }
 }

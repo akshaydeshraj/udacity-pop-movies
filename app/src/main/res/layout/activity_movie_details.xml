@@ -37,6 +37,12 @@
                     android:id="@+id/tv_user_rating"
                     style="@style/MovieDetailsTextAppearance" />
 
+                <Button
+                    android:id="@+id/btn_favourite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Favourite"/>
+
             </LinearLayout>
 
         <TextView
