@@ -2,9 +2,7 @@ package com.axay.movies.ui.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -47,10 +45,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
         tvOverView = (TextView) findViewById(R.id.tv_overview);
         tvReleaseDate = (TextView) findViewById(R.id.tv_release_date);
         tvUserRating = (TextView) findViewById(R.id.tv_user_rating);
-
-        Log.e("Picasso", BASE_IMAGE_URL + movie.getPosterPath());
-
-        ViewCompat.setElevation(ivPoster, 12);
 
         Picasso.with(this).load(BASE_BACKDROP_URL + movie.getBackdropPath()).fit().centerCrop().into(ivBackdrop);
         Picasso.with(this).load(BASE_IMAGE_URL + movie.getPosterPath()).fit().centerCrop().into(ivPoster);
