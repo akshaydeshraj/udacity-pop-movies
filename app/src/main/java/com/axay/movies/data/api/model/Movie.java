@@ -3,19 +3,42 @@ package com.axay.movies.data.api.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * @author akshay
  * @since 27/12/15
  */
 public class Movie implements Parcelable {
 
+    private String id;
+
     private String title;
+
+    @SerializedName("poster_path")
     private String posterPath;
+
     private String overview;
+
+    @SerializedName("backdrop_path")
     private String backdropPath;
+
+    @SerializedName("vote_average")
     private String voteAverage;
+
+    @SerializedName("release_date")
     private String releaseDate;
+
     private String originalTitle;
+
+    private String popularity;
+
+    @SerializedName("vote_count")
+    private String voteCount;
+
+    private boolean video;
+
+    private boolean adult;
 
     public Movie(String title, String posterPath, String overview,
                  String backdropPath, String voteAverage, String releaseDate, String originalTitle) {

@@ -7,6 +7,8 @@ import com.axay.movies.ui.UiComponent;
 import com.axay.movies.ui.UiModule;
 import com.squareup.leakcanary.LeakCanary;
 
+import timber.log.Timber;
+
 /**
  * @author akshay
  * @since 7/2/16
@@ -32,6 +34,10 @@ public class App extends Application {
                 .appModule(appModule)
                 .uiModule(uiModule)
                 .build();
+
+        if (BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree());
+        }
     }
 
     public UiComponent getComponent() {

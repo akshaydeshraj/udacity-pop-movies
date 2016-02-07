@@ -11,8 +11,6 @@ import com.axay.movies.ui.fragment.MoviesFragment;
 
 public class MainActivity extends AppCompatActivity implements MoviesFragment.OnMovieSelectedListener {
 
-    public static final String TAG = MainActivity.class.getSimpleName();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
